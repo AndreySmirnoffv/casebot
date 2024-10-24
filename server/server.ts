@@ -2,7 +2,7 @@ import express, { Express, Response } from "express";
 import dotenv from "dotenv";
 import refRoutes from './src/routes/ref.routes'
 import paymentRoutes from './src/routes/payment.routes'
-import cryptoRoutes from './src/routes/crypto.routes'
+// import cryptoRoutes from './src/routes/crypto.routes'
 import cors from 'cors';
 import logger from "../assets/logger/logger";
 
@@ -20,7 +20,7 @@ app.get("/", (_, res: Response) => {
 
 app.use('/api/payments', paymentRoutes);
 app.use('/api/ref', refRoutes);
-app.use("/api/crypto", cryptoRoutes)
+// app.use("/api/crypto", cryptoRoutes)
 
 app.listen(port, () => {
     logger.info(`[server]: Server is running at http://localhost:${port}`);

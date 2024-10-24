@@ -1,26 +1,41 @@
-import { Request, Response } from "express";
-import { PaymentServiceRub } from "../services/payment.service.rub";
+import { v4 } from 'uuid';
+import { IYooMoneyPayload } from '../interfaces/paymentInterfaces/Yoomoney/IYooMoneyPayload';
+import { checkout } from '../services/yoomoney.service';
 
-export async function createRubPayment(req: Request, res: Response) {
-    const { amount } = req.body;
+export async function createRubPayment(amount: number): Promise<any> {
+    const payload: IYooMoneyPayload = {
+        amount: {
+            value: String(amount),
+            currency: "RUB"
+        },
+        payment_method_data: {
+            type: 'bank_card'
+        },
+        confirmation: {
+            type: 'redirect',
+            return_url: "telegram"
+        },
+        description: "desc"
+    };
 
-    try {
-        const paymentResponse = await PaymentServiceRub.createRubPayment(Number(amount));
-        res.status(200).send(paymentResponse);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error creating payment');
-    }
-};
+    return await checkout.createPayment(payload, v4());
+}
 
-export async function captureRubPayment(req: Request, res: Response) {
-    const { paymentId, amount } = req.body;
+export async function captureRubPayment (paymentId: string, amount: number): Promise<any> {
+    const payload: IYooMoneyPayload = {
+        amount: {
+            value: String(amount),
+            currency: "RUB"
+        },
+        payment_method_data: {
+            type: 'bank_card'
+        },
+        confirmation: {
+            type: 'redirect',
+            return_url: "telegram"
+        },
+        description: "desc"
+    };
 
-    try {
-        const captureResponse = await PaymentServiceRub.captureRubPayment(paymentId, Number(amount));
-        res.status(200).send(captureResponse);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error capturing payment');
-    }
+    return await checkout.capturePayment(paymentId, payload, v4());
 }
