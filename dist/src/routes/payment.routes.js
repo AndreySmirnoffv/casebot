@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const payment_controller_1 = require("../controllers/payment.controller");
+const stripe_payment_controller_1 = require("../controllers/stripe.payment.controller");
+const router_1 = require("./router");
+router_1.router.post("/createstripepayment", stripe_payment_controller_1.createStripeCheckoutSession);
+router_1.router.post("/createstripepayout", stripe_payment_controller_1.createStripePayoutSession);
+router_1.router.post("/updatestripepaymentstatus", stripe_payment_controller_1.updateStripePaymentStatus);
+router_1.router.get("/getstripepayoutes", stripe_payment_controller_1.getStripePayouts);
+router_1.router.post("/createrubpayment", payment_controller_1.createRubPayment);
+router_1.router.post("/capturerubpayment", payment_controller_1.getPayment);
+router_1.router.post("/updatestripepayment", stripe_payment_controller_1.updateStripeCheckoutSession);
+exports.default = router_1.router;
