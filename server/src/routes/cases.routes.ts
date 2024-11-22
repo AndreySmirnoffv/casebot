@@ -3,6 +3,5 @@ import { router } from "./router";
 
 router.post("/getcase", getCases)
 router.post("/opencase", openCase)
-router.get("/getcasesamount", getCasesAmount)
 
 export default router

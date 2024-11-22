@@ -1,4 +1,4 @@
-import { pool } from "../../assets/db/connection";
+import { pool } from "../services/connection";
 import logger from "../../assets/logger/logger";
 import { RowDataPacket } from "mysql2";
 
@@ -36,7 +36,7 @@ export async function updateUserBalance(id: number, amount: number) {
 export async function getCurrentUserBalance(id: number): Promise<number> {
     const query = "SELECT balance FROM users WHERE id = ?";
 
-    return new Promise<number>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         pool.query(query, [id], (error, results) => {
             if (error) {
                 logger.error(error);

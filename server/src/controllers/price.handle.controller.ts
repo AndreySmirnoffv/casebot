@@ -1,27 +1,14 @@
-import { Response } from "express";
-import { pool } from "../../assets/db/connection";
-import { IResult } from "../interfaces/IResult";
+import axios from "axios"
+import dotenv from 'dotenv'
 
-export async function handlePrice(
-    price: number,
-    tableName: string,
-    network: string,
-    res: Response
-) {
-    try {
-        const results = await new Promise<IResult[]>((resolve, reject) => {
-            pool.query(`SELECT * FROM ?? WHERE network = ?`, [tableName, network], (error, results) => {
-                if (error) {
-                    return reject(error);
-                }
+dotenv.config()
 
-                resolve(results as IResult[]);
-            });
-        });
-
-        const amounts = results.map(result => result.amount * price);
-        res.status(200).send({ amounts });
-    } catch (error) {
-        res.status(500).send({ message: "Ошибка с подключением к БД либо с передачей параметров: " + error });
-    }
+async function test(){
+    await axios.get(`https://openexchangerates.org/api/latest.json?app_id=1976040383e040e7ba26035df57fc05e`).then(res => {
+        console.log(res.data.rates["EUR"])
+    }).catch(error => {
+        console.log(error)
+    })
 }
+
+test()

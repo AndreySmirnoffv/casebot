@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import { cryptoClient } from "../services/crypto.service";
 import logger from "../../assets/logger/logger";
 
-export async function getCoinData(req: Request, res: Response): Promise<any> {
-    const { coin } = req.body;
+export async function getCoinData(coin: string): Promise<any> {
     console.log("getCoinData - Запрос данных для монеты:", coin);
     
     try {
@@ -13,10 +12,9 @@ export async function getCoinData(req: Request, res: Response): Promise<any> {
                 symbol: coin + "USDT"
             });
         console.log(response);
-        res.json(response); 
+      ; 
     } catch (error) {
         console.error("getCoinData - Ошибка при запросе данных для монеты:", error);
-        res.status(500).send(error);
     }
 }
 

@@ -3,6 +3,8 @@ import { stripe } from "../services/stripe.service";
 import { insertStripePayment, listStripePayouts, updateStripePaymentsStatus } from "../models/db.stripe.model";
 import logger from "../../assets/logger/logger";
 import { getCurrentUserBalance, updateUserBalance } from "../models/db.users.model";
+import { exchange } from "../services/exchange";
+
 
 export async function createStripeCheckoutSession(req: Request, res: Response): Promise<any> {
     const { amount, currency, userId, email } = req.body;
@@ -19,8 +21,9 @@ export async function createStripeCheckoutSession(req: Request, res: Response): 
 
         const userBalance: number = await getCurrentUserBalance(userId);
         console.log(response)
+        const exchangeResult = await exchange(currency, "USD")
         await insertStripePayment(response, userId);
-        await updateUserBalance(userBalance + response.amount, userId)
+        await updateUserBalance((userBalance + response.amount) * exchangeResult, userId)
         res.json(response)
     } catch (error) {
         console.error(error);
@@ -66,8 +69,6 @@ export async function createStripePayoutSession(req: Request, res: Response){
 
 export async function getStripePayouts(res: Response): Promise<any>{
     const response = await listStripePayouts()
-
-    logger.info(response)
 
     return res.json(response)
 }

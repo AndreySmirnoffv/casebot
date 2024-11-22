@@ -22,7 +22,7 @@ export async function openCase(req: Request, res: Response): Promise<any> {
     //     return res?.status(400).json({ message: "Недостаточно средств для покрытия стоимости кейса." });
     // }
 
-    const response = await randomDrop(tableName);
+    const response = await randomDrop(tableName, circles);
     console.log("openCase - Полученные данные из randomDrop:", response);
 
     await insertCaseCounter();
@@ -33,6 +33,7 @@ export async function openCase(req: Request, res: Response): Promise<any> {
 export async function getCasesAmount(req: Request, res: Response): Promise<any> {
         const response = await getCasesAmountDb(); 
         
-        return res.json({response});
+        return response;
 }
+
 

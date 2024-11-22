@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { pool } from "../../assets/db/connection";
+import { pool } from "../services/connection";
 import logger from "../../assets/logger/logger";
 import { stripe } from "../services/stripe.service";
 
@@ -37,5 +37,9 @@ export async function updateStripePaymentsStatus(paymentId: string, status: stri
 }
 
 export async function listStripePayouts() {
-    return logger.info((await stripe.payouts.list()).data.length);
+    const response = await stripe.payouts.list();
+
+    const totalAmount = response.data.reduce((sum, payout) => sum + payout.amount, 0);
+    
+    return totalAmount;
 }

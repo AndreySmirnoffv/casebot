@@ -1,20 +1,22 @@
 import express, { Express, Response } from "express";
 import dotenv from "dotenv";
-import refRoutes from './src/routes/ref.routes';
-import paymentRoutes from './src/routes/payment.routes';
-import casesRoutes  from './src/routes/cases.routes';
-import usersRoutes from './src/routes/users.routes';
-import cryptoRoutes from './src/routes/crypto.routes';
+import refRoutes from './src/routes/ref.routes'
+import paymentRoutes from './src/routes/payment.routes'
+import casesRoutes  from './src/routes/cases.routes'
+import usersRoutes from './src/routes/users.routes'
+import cryptoRoutes from './src/routes/crypto.routes'
+import allData from './src/routes/getAllData.routes'
 import cors from 'cors';
 import logger from "./assets/logger/logger";
+import { redis } from "./src/services/redis.service";
+import { wss } from "./src/services/websocket.service";
+import { broadcastOnlineUsers } from "./src/controllers/websocket";
 
 dotenv.config();
 
-console.log('PORT:', process.env.PORT);
+export const app: Express = express();
+const port = process.env.PORT || 3000;
 
-const app: Express = express();
-
-const port = process.env.PORT;
 app.use(express.json());
 app.use(cors({
     origin: "https://crypto-drop.netlify.app",
@@ -27,10 +29,14 @@ app.get("/", (_, res: Response) => {
 
 app.use('/api/payments', paymentRoutes);
 app.use('/api/ref', refRoutes);
-app.use("/api/cases", casesRoutes);
-app.use("/api/gettotalusers", usersRoutes);
-app.use("/api/crypto", cryptoRoutes);
+app.use("/api/cases", casesRoutes)
+app.use("/api/user", usersRoutes)
+app.use("/api/crypto", cryptoRoutes)
+app.use("/api/getAllData", allData)
 
+broadcastOnlineUsers()
 app.listen(port, () => {
     logger.info(`[server]: Server is running at http://localhost:${port}`);
 });
+
+

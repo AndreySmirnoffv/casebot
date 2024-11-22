@@ -1,7 +1,7 @@
-import { pool } from "../../assets/db/connection";
+import { pool } from "../services/connection";
 import logger from "../../assets/logger/logger";
 import {QueryError, QueryResult, RowDataPacket} from "mysql2";
-import {getCoinData} from "../controllers/crypto.controller"; // Импортируем RowDataPacket
+import {getCoinData} from "../controllers/crypto.controller";
 
 export async function getCase(tableName: string) {
     const query = `SELECT * FROM ??;`;
@@ -11,8 +11,9 @@ export async function getCase(tableName: string) {
                 logger.error("error: " + error);
                 return reject(error); 
             }
-
-            resolve(results);
+            results = results as RowDataPacket[]
+            const processedResults = results.map((result) => getCoinData(String(result.name + "USDT")));
+            resolve(processedResults);
         });
     });
 }
@@ -30,8 +31,9 @@ export async function insertCaseCounter(){
     })
 }
 
-export async function randomDrop(tableName: string): Promise<RowDataPacket[]> {
+export async function randomDrop(tableName: string, circles: number): Promise<RowDataPacket[]> {
     console.log("randomDrop - Запрос уникальных имён из таблицы:", tableName);
+
     const uniqueNamesQuery = `SELECT DISTINCT name FROM ??`;
 
     const uniqueNames: string[] = await new Promise<string[]>((resolve, reject) => {
@@ -50,33 +52,54 @@ export async function randomDrop(tableName: string): Promise<RowDataPacket[]> {
             });
 
             resolve(names);
-
         });
     });
 
-    console.log("randomDrop - Полученные уникальные имена после обработки:", uniqueNames);
+    const selectedCoins: RowDataPacket[] = [];
 
-    for (const symbol of uniqueNames) {
-        console.log(symbol)
-        
-    }
+    for (let i = 0; i < circles; i++) {
+        const randomName = uniqueNames[Math.floor(Math.random() * uniqueNames.length)];
+        console.log(`randomDrop - Случайно выбранное имя для круга ${i + 1}:`, randomName);
 
-    const query = `
-    SELECT * FROM ?? 
-    WHERE name IN (?)
-    `;
+        const query = `
+        SELECT * FROM ?? 
+        WHERE name = ?
+        `;
 
-    return new Promise<RowDataPacket[]>((resolve, reject) => {
-        pool.query(query, [tableName, uniqueNames], (error, results) => {
-            if (error) {
-                console.error("randomDrop - Ошибка при выборке данных:", error);
-                return reject(new Error("Ошибка при выборке данных: " + error.message));
+        const rows = await new Promise<RowDataPacket[]>((resolve, reject) => {
+            pool.query(query, [tableName, randomName], (error, results) => {
+                if (error) {
+                    console.error("randomDrop - Ошибка при выборке данных:", error);
+                    return reject(new Error("Ошибка при выборке данных: " + error.message));
+                }
+
+                const rows = results as RowDataPacket[];
+                console.log(`randomDrop - Данные, полученные из выборки для круга ${i + 1}:`, rows);
+                resolve(rows);
+            });
+        });
+
+        const weightedCoins: RowDataPacket[] = [];
+
+        rows.forEach((coin) => {
+            getCoinData(String(coin))
+            const percentage = coin.percentage;
+            if (percentage > 0) {
+                for (let i = 0; i < percentage; i++) {
+                    weightedCoins.push(coin);
+                }
             }
-            const rows = results as RowDataPacket[];
-            console.log("randomDrop - Данные, полученные из выборки:", rows);
-            resolve(rows);
         });
-    });
+
+        if (weightedCoins.length > 0) {
+            const randomCoin = weightedCoins[Math.floor(Math.random() * weightedCoins.length)];
+            console.log(`randomDrop - Случайно выбранная монета для круга ${i + 1}:`, randomCoin);
+            selectedCoins.push(randomCoin);
+        } else {
+            console.error(`randomDrop - Нет монет с корректным процентом для круга ${i + 1}`);
+        }
+    }
+    return selectedCoins;
 }
 
 
@@ -90,7 +113,7 @@ export async function getCasesAmountDb(): Promise<unknown> {
             }
 
             const rows = results as RowDataPacket[];
-            resolve(rows[0]);
+            resolve(rows[0].casesAmount);
         });
     });
 }

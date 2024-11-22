@@ -13,5 +13,5 @@ export async function userBalance(req: Request, res: Response): Promise<any>{
 
     const response = await getCurrentUserBalance(id)
 
-    return res.json(response)
+    return res.json({balance: response})
 }

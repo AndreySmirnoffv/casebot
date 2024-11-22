@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { pool } from "../../assets/db/connection";
+import { pool } from "../services/connection";
 import { RowDataPacket } from "mysql2";
 
 export async function getRefByChatId(chatId: number, res: Response) {

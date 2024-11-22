@@ -1,5 +1,5 @@
 import { Response } from "express"
-import { pool } from "../../assets/db/connection"
+import { pool } from "../services/connection"
 import logger from "../../assets/logger/logger"
 
 export async function insertYooMoneyPayment(response: any, userId: string, res?: Response): Promise<any>{
