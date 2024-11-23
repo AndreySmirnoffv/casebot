@@ -127,7 +127,11 @@ export async function rubPayout(req: Request, res: Response) {
 export async function getRubPayoutList() {
   const items = (await checkout.getPaymentList()).items;
 
-  const totalAmount = items.reduce((sum, item) => sum + parseFloat(item.amount.value), 0);
+  const convertUsd = await exchange("rub", "usd");
+
+  const totalAmount = items.reduce((sum, item) => 
+    sum + parseFloat(item.amount.value) * convertUsd, 
+  0);
 
   return totalAmount;
 }

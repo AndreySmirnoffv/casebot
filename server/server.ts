@@ -8,8 +8,6 @@ import cryptoRoutes from './src/routes/crypto.routes'
 import allData from './src/routes/getAllData.routes'
 import cors from 'cors';
 import logger from "./assets/logger/logger";
-import { redis } from "./src/services/redis.service";
-import { wss } from "./src/services/websocket.service";
 import { broadcastOnlineUsers } from "./src/controllers/websocket";
 
 dotenv.config();
