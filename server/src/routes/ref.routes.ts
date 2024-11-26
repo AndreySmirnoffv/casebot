@@ -1,6 +1,6 @@
 import { getRef } from '../controllers/ref.controller';
-import { router } from './router';
+import app from './payment.routes';
 
-router.post('/getref', getRef);
+app.post('/getref', getRef);
 
-export default router;
+export default app;

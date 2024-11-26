@@ -1,7 +1,7 @@
 import { allUsers, userBalance } from "../controllers/users.controller";
-import { router } from "./router";
+import app from "./payment.routes";
 
-router.get("/users", allUsers)
-router.post("/balance", userBalance)
+app.get("/users", allUsers)
+app.post("/balance", userBalance)
 
-export default router
+export default app

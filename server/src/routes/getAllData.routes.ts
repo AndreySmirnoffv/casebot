@@ -1,6 +1,6 @@
 import { getAllData } from "../controllers/getAllData.controller";
-import { router } from "./router";
+import app from "./payment.routes";
 
-router.get("/getalldata", getAllData)
+app.get("/getalldata", getAllData)
 
-export default router
+export default app;

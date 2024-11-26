@@ -35,11 +35,3 @@ export async function updateStripePaymentsStatus(paymentId: string, status: stri
         });
     });
 }
-
-export async function listStripePayouts() {
-    const response = await stripe.payouts.list();
-
-    const totalAmount = response.data.reduce((sum, payout) => sum + payout.amount, 0);
-    
-    return totalAmount;
-}
