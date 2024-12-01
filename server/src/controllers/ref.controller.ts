@@ -5,8 +5,8 @@ export async function getRef (req: Request, res: Response): Promise<any> {
     const { chatId } = req.body;
 
     try {
-        console.log(typeof chatId)
-        const ref = await getRefByChatId(chatId, res);
+        const ref = await getRefByChatId(chatId);
+        
         if (!ref) {
             return res.status(404).json({ message: "User not found" });
         }

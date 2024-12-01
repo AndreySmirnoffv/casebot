@@ -6,9 +6,13 @@ export async function allUsers(): Promise<any> {
 }
 
 export async function userBalance(req: Request, res: Response): Promise<any>{
-    const {id} = req.body
+    try {
+        const {id} = req.body
 
-    const response = await getCurrentUserBalance(id)
-
-    return res.json({balance: response})
+        const response = await getCurrentUserBalance(id)
+    
+        return res.json({balance: response})  
+    } catch (error) {
+        console.error(error)
+    }
 }

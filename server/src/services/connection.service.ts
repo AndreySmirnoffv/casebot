@@ -5,11 +5,11 @@ import logger from '../../assets/logger/logger';
 dotenv.config({path: "../../.env"})
 
 export const pool = mysql.createPool({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME,
-    port: Number(process.env.DATABASE_PORT),
+    host: "localhost",
+    user: "root",
+    password: "root",
+    database: "casebot",
+    port: 3306,
 });
 
 

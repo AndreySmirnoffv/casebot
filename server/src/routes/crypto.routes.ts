@@ -1,6 +1,6 @@
 import { getCoinData, withdraw } from "../controllers/crypto.controller";
-import app from "./payment.routes";
+import { router } from "./router";
 
-app.post("/withdeaw", withdraw)
+router.post("/withdeaw", withdraw)
 
-export default app;
+export default router;

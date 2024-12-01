@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { pool } from "../services/connection";
+import { pool } from "../services/connection.service";
 import logger from "../../assets/logger/logger";
 import { stripe } from "../services/stripe.service";
 

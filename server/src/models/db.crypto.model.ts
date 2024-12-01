@@ -1,4 +1,4 @@
-import { pool } from "../services/connection";
+import { pool } from "../services/connection.service";
 
 export async function dbGetCrypto(tableName: string, cryptos: string[]): Promise<any> {
     return new Promise((resolve, reject) => {

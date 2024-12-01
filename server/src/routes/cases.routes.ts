@@ -1,7 +1,8 @@
-import { openCase, getCases } from "../controllers/cases.controller";
-import app from "./payment.routes";
+import { openCase, getCases, getCasesAmount } from "../controllers/cases.controller";
+import { router } from "./router";
 
-app.post("/getcase", getCases)
-app.post("/opencase", openCase)
+router.get("/getcasesamount", getCasesAmount)
+router.post("/getcase", getCases)
+router.post("/opencase", openCase)
 
-export default app
+export default router

@@ -1,4 +1,4 @@
-import { pool } from "../services/connection";
+import { pool } from "../services/connection.service";
 import logger from "../../assets/logger/logger";
 import { RowDataPacket } from "mysql2";
 

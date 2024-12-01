@@ -1,4 +1,4 @@
-import { pool } from "../services/connection";
+import { pool } from "../services/connection.service";
 import logger from "../../assets/logger/logger";
 import {QueryError, QueryResult, RowDataPacket} from "mysql2";
 import {getCoinData} from "../controllers/crypto.controller";

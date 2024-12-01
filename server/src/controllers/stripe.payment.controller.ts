@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import { stripe } from "../services/stripe.service";
 import { insertStripePayment, updateStripePaymentsStatus } from "../models/db.stripe.model";
 import logger from "../../assets/logger/logger";
@@ -11,7 +11,7 @@ export async function createStripeCheckoutSession(req: Request, res: Response): 
 
     try {
         const response = await stripe.paymentIntents.create({
-            amount: amount/100,
+            amount: amount,
             currency: currency,
             automatic_payment_methods: {
                 enabled: true
@@ -68,7 +68,7 @@ export async function createStripePayoutSession(req: Request, res: Response){
     }
 }
 
-export async function getStripePayouts(res: Response): Promise<any>{
-
-    return res.json(await stripe.payouts.list())
+export async function getStripePayouts(res?: Response): Promise<any>{
+    
+    return res?.json(await stripe.payouts.list())
 }
