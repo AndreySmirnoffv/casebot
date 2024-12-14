@@ -11,3 +11,11 @@ export const webAppKeyboard = {
         ]
     }
 }
+
+export const adminKeyboard = {
+    reply_markup: {
+        inline_keyboard: [
+            [{text: "Добавить подкрут для пользователя", callback_data: "add_percantage_user"}]
+        ]
+    }
+}

@@ -113,7 +113,7 @@ export async function getCasesAmountDb(): Promise<unknown> {
             }
 
             const rows = results as RowDataPacket[];
-            resolve(rows[0].casesAmount);
+            resolve(rows[0]);
         });
     });
 }

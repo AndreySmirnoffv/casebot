@@ -8,6 +8,7 @@ export async function exchange(base: string, target: string){
     console.log(response.data.exchange_rates.USD)
     return response.data.exchange_rates.USD
 }
+
 //'https://exchange-rates.abstractapi.com/v1/live/?api_key=84ba2d2bbcec4023a3f3098d1f1e8e65&base=EUR&target=RUB'
 
 exchange("rub", "usd")
